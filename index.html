@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <title>Đang xác minh...</title>
+  <script>
+    const url = new URL(window.location.href);
+    const key = url.searchParams.get("key");
+
+    if (!key) {
+      document.body.innerHTML = "Thiếu key xác minh";
+    } else {
+      setTimeout(() => {
+        window.location.href =
+          "https://t.me/YourBotUsername?start=verify_" + key;
+      }, 3000); // 3 giây
+    }
+  </script>
+</head>
+<body>
+  <h3>⏳ Đang xác minh, vui lòng chờ 3 giây...</h3>
+</body>
+</html>
