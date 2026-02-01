@@ -1,25 +1,103 @@
-<!DOCTYPE html>
-<html lang="vi">
+<!DOCTYPE html><html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <title>Đang xác minh...</title>
-  <script>
-    const url = new URL(window.location.href);
-
-    // LẤY start=verify_xxx
-    const start = url.searchParams.get("start");
-
-    if (!start) {
-      document.body.innerHTML = "❌ Thiếu dữ liệu xác minh";
-    } else {
-      setTimeout(() => {
-        window.location.href =
-          "https://t.me/KiemtienNapLQ04Bot?start=" + start;
-      }, 3000);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kho Ứng Dụng</title>
+  <meta name="description" content="Trang chuyên up link và tạo nút tải như App Store / CH Play" />
+  <style>
+    :root{
+      --bg:#0b0f14; --card:#111827; --muted:#94a3b8; --text:#e5e7eb;
+      --brand:#22c55e; --brand-2:#3b82f6; --border:#1f2937;
     }
-  </script>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu; background:linear-gradient(180deg,#0b0f14,#0a1220); color:var(--text)}
+    header{position:sticky;top:0;z-index:10;background:rgba(11,15,20,.7);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .wrap{max-width:1100px;margin:auto;padding:16px}
+    .row{display:flex;gap:12px;align-items:center}
+    .brand{font-weight:700;letter-spacing:.3px}
+    .search{flex:1}
+    .search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:#020617;color:var(--text)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+    .card{background:linear-gradient(180deg,#0b1222,#0a1220);border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .card .top{display:flex;gap:12px;padding:14px}
+    .icon{width:56px;height:56px;border-radius:14px;background:#020617;border:1px solid var(--border);object-fit:cover}
+    .title{font-weight:600}
+    .dev{color:var(--muted);font-size:13px}
+    .desc{padding:0 14px 10px;color:#cbd5f5;font-size:14px}
+    .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12px;padding:0 14px 12px}
+    .actions{display:flex;gap:10px;padding:14px}
+    .btn{flex:1;padding:12px;border-radius:14px;border:1px solid var(--border);background:#020617;color:var(--text);cursor:pointer}
+    .btn.primary{background:linear-gradient(135deg,var(--brand),#16a34a);color:#052e16;border:none}
+    .btn.alt{background:linear-gradient(135deg,var(--brand-2),#2563eb);color:#020617;border:none}
+    footer{color:var(--muted);text-align:center;padding:28px}
+    .tag{padding:4px 8px;border-radius:999px;border:1px solid var(--border);background:#020617}
+    @media (max-width:480px){.row{flex-wrap:wrap}}
+  </style>
 </head>
 <body>
-  <h3>⏳ Đang xác minh, vui lòng chờ 10 giây...</h3>
-</body>
+  <header>
+    <div class="wrap row">
+      <div class="brand">📦 Kho Ứng Dụng</div>
+      <div class="search"><input id="q" placeholder="Tìm app…" /></div>
+    </div>
+  </header>  <main class="wrap">
+    <div id="grid" class="grid"></div>
+  </main>  <footer>© 2026 • Trang chuyên up link & tạo nút tải</footer>  <script>
+    // ==== DỮ LIỆU APP – CHỈ CẦN DÁN LINK VÀO ĐÂY ====
+    const APPS = [
+      {
+        name: "Bot Telegram",
+        developer: "NghiaTV",
+        icon: "https://placehold.co/112x112/png",
+        description: "Bot hỗ trợ tiện ích Telegram, cài nhanh – dùng gọn.",
+        size: "12 MB",
+        platform: "Android",
+        download: "https://example.com/tai-bot.apk",
+        alt: "https://t.me/ModSkinNghiaTVBot"
+      },
+      {
+        name: "Tool Mod",
+        developer: "NghiaTV",
+        icon: "https://placehold.co/112x112/png",
+        description: "Công cụ hỗ trợ mod – cập nhật thường xuyên.",
+        size: "28 MB",
+        platform: "PC",
+        download: "https://example.com/tai-tool.zip"
+      }
+    ];
+
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('q');
+
+    function render(list){
+      grid.innerHTML = list.map(app => `
+        <div class="card">
+          <div class="top">
+            <img class="icon" src="${app.icon}" alt="${app.name}">
+            <div>
+              <div class="title">${app.name}</div>
+              <div class="dev">${app.developer}</div>
+            </div>
+          </div>
+          <div class="desc">${app.description || ''}</div>
+          <div class="meta">
+            <span class="tag">${app.platform || 'All'}</span>
+            <span>•</span>
+            <span>${app.size || ''}</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="${app.download}" target="_blank" rel="noopener">Tải về</a>
+            ${app.alt ? `<a class="btn alt" href="${app.alt}" target="_blank" rel="noopener">Liên kết</a>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    q.addEventListener('input', () => {
+      const k = q.value.toLowerCase();
+      render(APPS.filter(a => a.name.toLowerCase().includes(k) || a.developer.toLowerCase().includes(k)));
+    });
+
+    render(APPS);
+  </script></body>
 </html>
